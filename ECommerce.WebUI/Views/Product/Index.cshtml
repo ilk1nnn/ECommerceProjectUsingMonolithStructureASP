@@ -1,0 +1,49 @@
+﻿@model ProductListViewModel
+
+<p>
+    @if (Model.CurrentFilterState)
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=true" class="btn btn-outline-primary">A-Z</a>
+    }
+    else
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=false" class="btn btn-outline-primary">Z-A</a>
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ProductName</th>
+            <th>UnitPrice</th>
+            <th>UnitsInStock</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>
+                    @item.ProductName
+                </td>
+                <td>
+                    @item.UnitPrice
+                </td>
+                <td>
+                    @item.UnitsInStock
+                </td>
+                <td>
+                    <a class="btn btn-xs btn-success" asp-controller="Cart"
+                   asp-action="AddToCart" asp-route-productId="@item.ProductId">Add To Cart</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<product-list-pager current-category="@Model.CurrentCategory"
+                    current-page="@Model.CurrentPage"
+                    page-count="@Model.PageCount"
+                    page-size="@Model.PageSize">
+
+</product-list-pager>

@@ -1,0 +1,75 @@
+﻿@model ProductListViewModel
+@{
+    Layout = "_AdminLayout";
+}
+
+<p>
+    <a href="/admin/add" class="btn btn-outline-primary">Create New</a>
+    @if (Model.CurrentFilterState)
+    {
+        <a href="/admin/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=true" class="btn btn-outline-primary">A-Z</a>
+    }
+    else
+    {
+        <a href="/admin/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=false" class="btn btn-outline-primary">Z-A</a>
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ProductName</th>
+            <th>UnitPrice</th>
+            <th>UnitsInStock</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>
+                    @item.ProductName
+                </td>
+                <td>
+                    @item.UnitPrice
+                </td>
+                <td>
+                    @item.UnitsInStock
+                </td>
+                <td>
+                    <a class="btn btn-xs btn-success" asp-controller="Admin"
+                   asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                </td>
+                <td id="@item.ProductId">
+                    <a class="btn btn-xs btn-success"
+                   onclick="GetData(@item.ProductId);">Open</a>
+                </td>
+                <td>
+                    <a class="btn btn-xs btn-success" asp-controller="Admin"
+                   asp-action="UpdateProduct" asp-route-id="@item.ProductId">Submit Update</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+
+        async function GetData(id){
+      //  alert(id);
+        event.stopPropagation();
+    let td=document.getElementById(id);
+    td.parentElement.style="background-color:springgreen";
+        await GetProduct(id);
+    }
+
+    async function GetProduct(id){
+        const response = await fetch(`Admin/Product?id=${id}`);
+        const jsonData = await response.json();
+        console.log(jsonData);
+        alert(jsonData.productName);
+    }
+</script>
+
